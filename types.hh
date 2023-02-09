@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdalign.h>
+#include <limits.h>
 
 using i8  = int8_t;
 using i16 = int16_t;
@@ -24,7 +25,6 @@ using usize   = size_t;
 using uintptr = uintptr_t;
 using uint    = unsigned int;
 using byte    = unsigned char;
-using uint    = unsigned int;
 
 #ifndef NO_SIGNED_SIZE
 static_assert(sizeof(ptrdiff_t) == sizeof(size_t),
@@ -32,5 +32,7 @@ static_assert(sizeof(ptrdiff_t) == sizeof(size_t),
               "alias, you can remove it by defining NO_SIGNED_SIZE");
 using ssize = ptrdiff_t;
 #endif
+
+static_assert(CHAR_BIT == 8, "Retarded platforms are not supported.");
 
 #endif /* header guard */

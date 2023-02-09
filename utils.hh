@@ -1,3 +1,5 @@
+// General utilities
+
 #ifndef INCLUDE_UTILS_HH_
 #define INCLUDE_UTILS_HH_
 
