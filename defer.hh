@@ -8,7 +8,7 @@
 template<typename F>
 struct Deferred_Call {
 	F f;
-	Deferred_Call(F&& f) : f(f) {}
+	Deferred_Call(F&& f) : f(as_rval(f)) {}
 	~Deferred_Call(){ f(); }
 };
 
