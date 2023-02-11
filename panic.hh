@@ -1,3 +1,6 @@
+#ifndef INCLUDE_PANIC_HH_
+#define INCLUDE_PANIC_HH_
+
 #include <cstdlib>
 #include <cstdio>
 #include "types.hh"
@@ -19,3 +22,4 @@ static inline void panic_assert(bool predicate, const char* msg = "Failed assert
 	if(!predicate){ panic(msg); }
 }
 
+#endif /* include guard */
