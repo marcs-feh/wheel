@@ -4,6 +4,8 @@
 #include "panic.hh"
 #include "utils.hh"
 
+namespace mf {
+
 template<typename T>
 struct Maybe {
 	T data;
@@ -79,5 +81,7 @@ struct Maybe {
 	}
 
 };
+
+}
 
 #endif /* include guard */

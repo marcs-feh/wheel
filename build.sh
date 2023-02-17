@@ -1,5 +1,6 @@
 #!/bin/sh
 
+
 cc='clang++ -std=c++17'
 release_flags='-O3 -pipe -Wall -Wextra -fno-exceptions'
 debug_flags='-O1 -pipe -Wall -Wextra -fsanitize=address'

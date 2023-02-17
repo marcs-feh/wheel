@@ -3,6 +3,7 @@
 #ifndef INCLUDE_UTILS_HH_
 #define INCLUDE_UTILS_HH_
 
+namespace mf {
 template <typename T>
 struct Strip_Ref { typedef T Type; };
 
@@ -34,6 +35,7 @@ void swap(T& a, T& b){
 	T t = as_rval(a);
 	a   = as_rval(b);
 	b   = as_rval(t);
+}
 }
 
 #endif /* include guard */

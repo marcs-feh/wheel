@@ -2,6 +2,7 @@
 #define INCLUDE_TEST_HH_
 
 #include "types.hh"
+#include "panic.hh"
 #include <iostream>
 
 struct Test {
@@ -10,12 +11,16 @@ struct Test {
 	const char* test_name;
 
 	template<typename A, typename B>
-	bool eq(const A& expect, const B& expr){
+	bool eq(const A& expect, const B& expr, const char* msg = nullptr){
 		bool ok = expect == expr;
 		test_count += 1;
 		if(!ok){
 			error_count += 1;
-			std::cerr << "\tFAIL: " << expect << " <-> " << expr << "\n";
+			if(msg){
+				std::cerr << msg << '\n';
+			} else {
+				std::cerr << "\tFAIL: " << expect << " <-> " << expr << '\n';
+			}
 		}
 		return ok;
 	}
@@ -41,7 +46,12 @@ struct Test {
 	}
 	~Test(){
 		display_end();
+		#ifdef PANIC_INTERCEPT
+		G::panic_intercepts = 0;
+		#endif
 	}
 };
+
+#define EQ(expr1, expr2) T.eq((expr1), (expr2), #expr1 " <-> " #expr2)
 
 #endif /* include guard */

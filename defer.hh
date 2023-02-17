@@ -5,6 +5,8 @@
 
 #include "utils.hh"
 
+namespace mf {
+
 template<typename F>
 struct Deferred_Call {
 	F f;
@@ -15,6 +17,7 @@ struct Deferred_Call {
 #define DEFER_HH_CONCAT_1(x, y) x##y
 #define DEFER_HH_CONCAT_2(x, y) DEFER_HH_CONCAT_1(x, y)
 #define DEFER_HH_CONCAT_COUNTER(x) DEFER_HH_CONCAT_2(x, __COUNTER__)
-#define defer Deferred_Call DEFER_HH_CONCAT_COUNTER(_tmp_defer_func_) = [&]()
+#define defer ::mf::Deferred_Call DEFER_HH_CONCAT_COUNTER(_tmp_defer_func_) = [&]()
 
+}
 #endif /* include guard */
