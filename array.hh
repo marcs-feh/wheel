@@ -1,7 +1,13 @@
 // Bounds checked array with proper size info
+
+#ifndef INCLUDE_ARRAY_HH_
+#define INCLUDE_ARRAY_HH_
+
 #include "types.hh"
 #include "panic.hh"
 #include <sys/types.h>
+
+namespace mf {
 
 template<typename T, usize N>
 struct Array {
@@ -13,7 +19,7 @@ struct Array {
 	// Bounds checked access
 	T& at(usize idx) & {
 		if(idx >= N){
-			panic("Index out of bounds");
+			mf::panic("Index out of bounds");
 			return data[0];
 		}
 		return data[idx];
@@ -24,7 +30,7 @@ struct Array {
 	// Bounds checked access (const)
 	const T& at(usize idx) const& {
 		if(idx >= N){
-			panic("Index out of bounds");
+			mf::panic("Index out of bounds");
 			return data[0];
 		}
 	}
@@ -58,3 +64,6 @@ struct Array {
 	}
 };
 
+}
+
+#endif /* include guard */

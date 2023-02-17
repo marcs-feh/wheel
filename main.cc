@@ -1,14 +1,15 @@
-#include "types.hh"
 #include <iostream>
-
-#define print(x) std::cout << x << '\n'
-
+#include "print.cc"
+#include "utils.hh"
 #define PANIC_INTERCEPT 1
+
+#include "types.hh"
 #include "defer.hh"
-#include "test.hh"
 #include "panic.hh"
 #include "maybe.hh"
 #include "array.hh"
+#include "dyn_array.hh"
+#include "test.hh"
 
 using namespace mf;
 
@@ -19,12 +20,12 @@ void test_maybe(){
 	EQ(false, a.ok());
 	a = 69;
 	EQ(true, a.ok());
-	EQ(69, a.get());
-	b.get();
+	EQ(69, a.val());
+	b.val();
 	EQ(1U, G::panic_intercepts);
 	b = a;
-	EQ(69, b.get());
-	EQ(a.get(), b.get());
+	EQ(69, b.val());
+	EQ(a.val(), b.val());
 	EQ(1U, G::panic_intercepts);
 }
 
@@ -44,9 +45,23 @@ void test_array(){
 	EQ(true, x == y);
 }
 
+void test_dyn_array(){
+	Test T("Dynamic Array");
+	Dyn_Array<i32> arr;
+	EQ(dyn_array_default_size, arr.cap());
+	EQ(0u, arr.len());
+	EQ(true, arr.data != nullptr);
+}
+
 int main(){
 	test_maybe();
 	test_array();
+	test_dyn_array();
+	i32 x = 9, y = 6;
+	print(x,y);
+	mf::swap(x,y);
+	print(x,y);
+
 	return 0;
 }
 

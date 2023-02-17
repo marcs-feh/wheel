@@ -11,24 +11,27 @@ struct Maybe {
 	T data;
 	bool is_ok;
 
-	// Check if data is safe to get()
+	// Check if data is safe to get value (not nil)
 	bool ok() const { return is_ok; }
 
 	// Causes data to be coerced to be non-ok
 	void make_nil() { is_ok = false; }
 
-	T& get() & {
-		panic_assert(is_ok, "Cannot get() from nil");
+	// Get contained value, panic otherwhise
+	T& val() & {
+		panic_assert(is_ok, "Cannot get value from nil");
 		return data;
 	}
 
-	const T& get() const& {
-		panic_assert(is_ok, "Cannot get() from nil");
+	// Get contained value, panic otherwhise
+	const T& val() const& {
+		panic_assert(is_ok, "Cannot get value from nil");
 		return data;
 	}
 
-	T&& get() && {
-		panic_assert(is_ok, "Cannot get() from nil");
+	// Get contained value, panic otherwhise
+	T&& val() && {
+		panic_assert(is_ok, "Cannot get valuefrom nil");
 		return as_rval(data);
 	}
 
@@ -44,7 +47,7 @@ struct Maybe {
 	}
 
 	// Copy assignment
-	void operator=(const Maybe<T>& opt){
+	void operator=(const Maybe& opt){
 		is_ok = opt.ok();
 		if(is_ok){
 			data = opt.data;
@@ -56,14 +59,14 @@ struct Maybe {
 	}
 
 	// Move constructor
-	Maybe(T&& val) : data(as_rval(val)) {
-		is_ok = true;
-	}
 	Maybe(Maybe&& opt) : is_ok(opt.ok()){
 		if(is_ok){
 			data = as_rval(opt.data);
 			opt.is_ok = false;
 		}
+	}
+	Maybe(T&& val) : data(as_rval(val)) {
+		is_ok = true;
 	}
 
 	// Move assignment
@@ -74,12 +77,10 @@ struct Maybe {
 		}
 		opt.is_ok = false;
 	}
-
 	void operator=(T&& val){
 		data  = as_rval(val);
 		is_ok = true;
 	}
-
 };
 
 }
