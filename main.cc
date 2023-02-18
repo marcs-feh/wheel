@@ -1,8 +1,9 @@
+#include <cstdio>
 #include <iostream>
 #include "print.cc"
-#include "utils.hh"
 #define PANIC_INTERCEPT 1
 
+#include "utils.hh"
 #include "types.hh"
 #include "defer.hh"
 #include "panic.hh"
@@ -12,6 +13,56 @@
 #include "test.hh"
 
 using namespace mf;
+// Tests
+void test_defer(); void test_maybe(); void test_array(); void test_dyn_array();
+
+void test_dyn_array(){
+	Test T("Dynamic Array");
+	Dyn_Array<i32> arr;
+	EQ(dyn_array_default_size, arr.cap());
+	EQ(0u, arr.len());
+	EQ(true, arr.data != nullptr);
+	arr.resize(8);
+	EQ(8u, arr.cap());
+	arr.add(6);
+	arr.add(9);
+	EQ(2u, arr.len());
+	EQ(6, arr[0]);
+	EQ(9, arr[1]);
+	arr.resize(1);
+	EQ(dyn_array_min_size, arr.cap());
+	EQ(1u, arr.len());
+	EQ(6, arr[0]);
+
+	arr.del();
+	EQ(0u, arr.len());
+
+	usize n = arr.cap();
+	for(usize i = 0; i < n; i += 1){
+		arr.add(i*2);
+	}
+
+	EQ(static_cast<usize>((n + 1) * dyn_array_growth_fact), arr.cap());
+}
+
+int main(){
+	test_defer();
+	test_maybe();
+	test_array();
+	test_dyn_array();
+
+	return 0;
+}
+
+void test_defer(){
+	Test T("Defer");
+	i32 n = 69;
+	{
+		defer { n = 420; };
+		EQ(69, n);
+	}
+	EQ(420, n);
+}
 
 void test_maybe(){
 	Test T("Maybe");
@@ -43,25 +94,5 @@ void test_array(){
 	x[1] = 9;
 	y = x;
 	EQ(true, x == y);
-}
-
-void test_dyn_array(){
-	Test T("Dynamic Array");
-	Dyn_Array<i32> arr;
-	EQ(dyn_array_default_size, arr.cap());
-	EQ(0u, arr.len());
-	EQ(true, arr.data != nullptr);
-}
-
-int main(){
-	test_maybe();
-	test_array();
-	test_dyn_array();
-	i32 x = 9, y = 6;
-	print(x,y);
-	mf::swap(x,y);
-	print(x,y);
-
-	return 0;
 }
 

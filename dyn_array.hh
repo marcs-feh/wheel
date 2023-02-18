@@ -8,7 +8,8 @@
 namespace mf {
 
 constexpr usize dyn_array_default_size = 16;
-constexpr usize dyn_array_min_size = 4; // WARN: Changing this to be less than 3 can cause terrible things.
+constexpr usize dyn_array_min_size     = 4;
+constexpr float dyn_array_growth_fact  = 1.75;
 
 template<typename T>
 struct Dyn_Array {
@@ -21,6 +22,35 @@ struct Dyn_Array {
 
 	// Get underlying buffer capacity
 	usize cap() const { return capacity; }
+
+	// Resize underlying buffer
+	void resize(usize size){
+		usize new_cap = max(size, dyn_array_min_size);
+		usize new_len = min(size, lenght);
+		T* new_data   = static_cast<T*>(::operator new(new_cap * sizeof(T)));
+		for(usize i = 0; i < new_len; i += 1){
+			new (&(new_data[i])) T(as_rval(data[i]));
+		}
+		::operator delete(data);
+		data     = new_data;
+		lenght   = new_len;
+		capacity = new_cap;
+	}
+
+	// Add element to end of array
+	void add(const T& e){
+		if((lenght + 1) >= capacity){
+			resize(static_cast<usize>((capacity + 1) * dyn_array_growth_fact));
+		}
+		new (&(data[lenght])) T(e);
+		lenght += 1;
+	}
+
+	// Remove element from end of array
+	void del(){
+		if(lenght == 0){ return; }
+		lenght -= 1;
+	}
 
 	// Bounds-checked access
 	T& at(usize idx) & {
@@ -78,7 +108,10 @@ struct Dyn_Array {
 	}
 
 };
-
 }
+
+static_assert(mf::dyn_array_default_size >= mf::dyn_array_min_size, "Default size must be bigger than min size");
+static_assert(mf::dyn_array_min_size > 3, "Min size must be larger than 3");
+static_assert(mf::dyn_array_growth_fact > 1.0, "Growth factor must be greater than 1.0");
 
 #endif /* include guard */
