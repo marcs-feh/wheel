@@ -23,6 +23,14 @@ struct Dyn_Array {
 	// Get underlying buffer capacity
 	usize cap() const { return capacity; }
 
+	// Check if element is in array
+	bool contains(const T& e) const {
+		for(usize i = 0; i < lenght; i += 1){
+			if(data[i] == e){ return true; }
+		}
+		return false;
+	}
+
 	// Resize underlying buffer
 	void resize(usize size){
 		usize new_cap = max(size, dyn_array_min_size);
@@ -46,10 +54,59 @@ struct Dyn_Array {
 		lenght += 1;
 	}
 
+	// Add element to a specific index (if index = len, it is equivalent to appending)
+	void add(const T& e, usize idx){
+		if(idx > lenght){
+			panic("Out of bounds add()"); return;
+		}
+
+		add(e);
+		if(idx == lenght){ return; }
+
+		for(usize i = lenght - 1; i > idx; i -= 1){
+			swap(data[i], data[i-1]);
+		}
+	}
+
+	// Add element to end of array
+	void add(T&& e){
+		if((lenght + 1) >= capacity){
+			resize(static_cast<usize>((capacity + 1) * dyn_array_growth_fact));
+		}
+		new (&(data[lenght])) T(as_rval(e));
+		lenght += 1;
+	}
+
+	// Add element to a specific index (if index = len, it is equivalent to appending)
+	void add(T&& e, usize idx){
+		if(idx > lenght){
+			panic("Out of bounds add()"); return;
+		}
+
+		add(as_rval(e));
+		if(idx == lenght){ return; }
+
+		for(usize i = lenght - 1; i > idx; i -= 1){
+			swap(data[i], data[i-1]);
+		}
+	}
+
 	// Remove element from end of array
 	void del(){
 		if(lenght == 0){ return; }
 		lenght -= 1;
+	}
+
+	// Delete element at index
+	void del(usize idx){
+		if(idx >= lenght){
+			panic("Out of bounds del()"); return;
+		}
+
+		lenght -= 1;
+		for(usize i = idx; i < lenght; i += 1){
+			swap(data[i], data[i+1]);
+		}
 	}
 
 	// Bounds-checked access
@@ -98,6 +155,23 @@ struct Dyn_Array {
 		capacity = max(hint, dyn_array_min_size);
 		data     = static_cast<T*>(::operator new(capacity * sizeof(T)));
 	}
+
+	// Copy constructor
+	Dyn_Array(const Dyn_Array& arr) : lenght(arr.lenght), capacity(arr.capacity){
+		data = ::operator new(capacity * sizeof(T));
+		for(usize i = 0; i < lenght; i += 1){
+			new (&(data[i])) T(data[i]);
+		}
+	}
+
+	// // Copy assignment
+	// void operator=(const Dyn_Array&){}
+	//
+	// // Move constructor
+	// Dyn_Array(Dyn_Array&&){}
+	//
+	// // Move assignment
+	// void operator=(Dyn_Array&&){}
 
 	// Destructor
 	~Dyn_Array(){

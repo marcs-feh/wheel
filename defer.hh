@@ -14,10 +14,11 @@ struct Deferred_Call {
 	~Deferred_Call(){ f(); }
 };
 
+}
+
 #define DEFER_HH_CONCAT_1(x, y) x##y
 #define DEFER_HH_CONCAT_2(x, y) DEFER_HH_CONCAT_1(x, y)
 #define DEFER_HH_CONCAT_COUNTER(x) DEFER_HH_CONCAT_2(x, __COUNTER__)
-#define defer ::mf::Deferred_Call DEFER_HH_CONCAT_COUNTER(_tmp_defer_func_) = [&]()
+#define defer mf::Deferred_Call DEFER_HH_CONCAT_COUNTER(_tmp_defer_func_) = [&]()
 
-}
 #endif /* include guard */

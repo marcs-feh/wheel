@@ -47,7 +47,7 @@ struct Test {
 	~Test(){
 		display_end();
 		#ifdef PANIC_INTERCEPT
-		G::panic_intercepts = 0;
+		mf::panic_intercepts = 0;
 		#endif
 	}
 };

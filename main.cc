@@ -16,6 +16,15 @@ using namespace mf;
 // Tests
 void test_defer(); void test_maybe(); void test_array(); void test_dyn_array();
 
+template<typename T>
+void print(const Dyn_Array<T>& arr){
+	std::cout << "(len:" << arr.len() << ",cap:" << arr.cap() << ")[ ";
+	for(usize i = 0; i < arr.len(); i += 1){
+		std::cout << arr[i] << ' ';
+	}
+	std::cout << "]\n";
+}
+
 void test_dyn_array(){
 	Test T("Dynamic Array");
 	Dyn_Array<i32> arr;
@@ -41,8 +50,25 @@ void test_dyn_array(){
 	for(usize i = 0; i < n; i += 1){
 		arr.add(i*2);
 	}
-
 	EQ(static_cast<usize>((n + 1) * dyn_array_growth_fact), arr.cap());
+
+	print(arr);
+	arr.add(7, 1);
+	arr.add(7, 0);
+	arr.add(7, arr.len());
+	EQ(true, (arr[2] == 7) && (arr[0] == 7) && (arr[arr.len()-1] - 1));
+	print(arr);
+
+	print(arr);
+	arr.del(0);
+	EQ(0, arr[0]);
+	arr.del(1);
+	EQ(2, arr[1]);
+	arr.del(arr.len() - 1);
+	EQ(6, arr[arr.len() - 1]);
+	print(arr);
+	EQ(false, arr.contains(-4));
+	EQ(true, arr.contains(0));
 }
 
 int main(){
@@ -73,11 +99,11 @@ void test_maybe(){
 	EQ(true, a.ok());
 	EQ(69, a.val());
 	b.val();
-	EQ(1U, G::panic_intercepts);
+	EQ(1U, panic_intercepts);
 	b = a;
 	EQ(69, b.val());
 	EQ(a.val(), b.val());
-	EQ(1U, G::panic_intercepts);
+	EQ(1U, panic_intercepts);
 }
 
 void test_array(){
@@ -88,7 +114,7 @@ void test_array(){
 	EQ(4, a[0]);
 	EQ(2, a[1]);
 	a[34] = 3;
-	EQ(1u, G::panic_intercepts);
+	EQ(1u, panic_intercepts);
 	Array<i32, 2> x, y;
 	x[0] = 6;
 	x[1] = 9;

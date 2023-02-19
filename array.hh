@@ -15,7 +15,7 @@ struct Array {
 
 	constexpr
 	usize len() const { return N; }
-	
+
 	// Bounds checked access
 	T& at(usize idx) & {
 		if(idx >= N){
