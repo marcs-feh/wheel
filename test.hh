@@ -1,6 +1,7 @@
 #ifndef INCLUDE_TEST_HH_
 #define INCLUDE_TEST_HH_
 
+#include "utils.hh"
 #include "types.hh"
 #include "panic.hh"
 #include <iostream>
@@ -17,25 +18,25 @@ struct Test {
 		if(!ok){
 			error_count += 1;
 			if(msg){
-				std::cerr << msg << '\n';
+				std::cout << msg << '\n';
 			} else {
-				std::cerr << "\tFAIL: " << expect << " <-> " << expr << '\n';
+				std::cout << "\tFAIL: " << expect << " <-> " << expr << '\n';
 			}
 		}
 		return ok;
 	}
 
 	void display_start(){
-		std::cerr << "----" << test_name << "----\n";
+		std::cout << "----" << test_name << "----\n";
 	}
 
 	void display_end(){
 		if(error_count == 0){
-			std::cerr << "PASSED: ";
+			std::cout << "PASSED: ";
 		} else {
-			std::cerr << "FAILED: ";
+			std::cout << "FAILED: ";
 		}
-		std::cerr << "ok in " << test_count - error_count << " out of " << test_count << " tests.\n";
+		std::cout << "ok in " << test_count - error_count << " out of " << test_count << " tests.\n";
 	}
 
 	Test(const char* name){
