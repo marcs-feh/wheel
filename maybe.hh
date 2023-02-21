@@ -16,8 +16,13 @@ struct Maybe {
 	// Check if data is safe to get value (not nil)
 	bool ok() const { return is_ok; }
 
-	// Causes data to be coerced to be non-ok
-	void make_nil() { is_ok = false; }
+	// Destroys contained data, returing back to nil
+	void destroy() {
+		if(is_ok){
+			data.~T();
+			is_ok = false;
+		}
+	}
 
 	// Get contained value, panic otherwhise
 	T& val() & {
