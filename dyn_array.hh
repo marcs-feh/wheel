@@ -164,14 +164,54 @@ struct Dyn_Array {
 		}
 	}
 
-	// // Copy assignment
-	// void operator=(const Dyn_Array&){}
-	//
-	// // Move constructor
-	// Dyn_Array(Dyn_Array&&){}
-	//
-	// // Move assignment
-	// void operator=(Dyn_Array&&){}
+	// Copy assignment
+	void operator=(const Dyn_Array& arr){
+		if(capacity < arr.capacity){
+			resize(arr.capacity);
+		}
+		if(lenght >= arr.lenght){
+			for(usize i = 0; i < arr.lenght; i += 1){
+				data[i] = arr.data[i];
+			}
+			// Trailing elements to be destructed
+			for(usize i = arr.lenght; i < lenght; i += 1){
+				data[i].~T();
+			}
+		} else {
+			for(usize i = 0; i < lenght; i += 1){
+				data[i] = arr.data[i];
+			}
+			// Extra elements to be copy constructed
+			for(usize i = lenght; i < arr.lenght; i += 1){
+				new (&data[i]) T(arr.data[i]);
+			}
+		}
+		lenght = arr.lenght;
+	}
+
+	// Move constructor
+	Dyn_Array(Dyn_Array&& arr) : lenght(arr.lenght), capacity(arr.capacity){
+		data = arr.data;
+
+		arr.data     = nullptr;
+		arr.lenght   = 0;
+		arr.capacity = 0;
+	}
+
+	// Move assignment
+	void operator=(Dyn_Array&& arr){
+		for(usize i = 0; i < lenght; i += 1){
+			data[i].~T();
+		}
+		::operator delete(data);
+		data     = arr.data;
+		capacity = arr.capacity;
+		lenght   = arr.lenght;
+
+		arr.data     = nullptr;
+		arr.lenght   = 0;
+		arr.capacity = 0;
+	}
 
 	// Destructor
 	~Dyn_Array(){
@@ -181,7 +221,17 @@ struct Dyn_Array {
 		::operator delete(data);
 	}
 
+	// Comparison
+	bool operator==(const Dyn_Array& arr){
+		if(lenght != arr.lenght){ return false; }
+		for(usize i = 0; i < lenght; i += 1){
+			if(data[i] != arr.data[i]){ return false; }
+		}
+		return true;
+	}
 };
+
+
 }
 
 static_assert(mf::dyn_array_default_size >= mf::dyn_array_min_size, "Default size must be bigger than min size");

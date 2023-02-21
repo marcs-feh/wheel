@@ -15,8 +15,8 @@ static inline void panic(const char* msg = nullptr){
 #else
 namespace mf {
 static u32 panic_intercepts = 0;
-static inline void panic(const char*){
-	// std::fprintf(stderr, "[*PANIC]: %s\n", msg);
+static inline void panic(const char* msg){
+	std::fprintf(stderr, "[(intercepted)PANIC]: %s\n", msg);
 	panic_intercepts += 1;
 }
 }

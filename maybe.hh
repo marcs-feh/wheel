@@ -61,6 +61,7 @@ struct Maybe {
 	Maybe(Maybe&& opt) : is_ok(opt.is_ok){
 		if(is_ok){
 			new (&data) T(as_rval(opt.data));
+			opt.is_ok = false;
 		}
 	}
 

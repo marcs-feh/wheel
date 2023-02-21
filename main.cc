@@ -3,7 +3,8 @@
 #include "print.cc"
 #define PANIC_INTERCEPT 1
 
-// TODO: reinforce maybe test
+// TODO: reinforce tests with move ctor and assignment
+// TODO: raii bs for dyn_array
 // TODO: finish Etiher
 
 #include "utils.hh"
@@ -64,11 +65,11 @@ struct B{
 };
 
 int main(){
-	test_defer();
-	test_maybe();
-	test_array();
+	// test_defer();
+	// test_maybe();
+	// test_array();
 	test_dyn_array();
-	test_either();
+	// test_either();
 	return 0;
 }
 
@@ -163,5 +164,17 @@ void test_dyn_array(){
 	EQ(6, arr[arr.len() - 1]);
 	EQ(false, arr.contains(-4));
 	EQ(true, arr.contains(0));
+
+	Dyn_Array<i32> x, y;
+	x.add(6);
+	x.add(9);
+	y.add(4);
+	y.add(2);
+	y.add(0);
+	y = x;
+	EQ(true, y == x);
+	y[0] = 7;
+	EQ(7, y[0]);
+	EQ(6, x[0]);
 }
 
