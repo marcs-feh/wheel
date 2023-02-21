@@ -8,9 +8,11 @@
 namespace wheel {
 namespace w = wheel;
 
+enum struct Either_Side : u8 { Left, Right };
+
 template<typename TL, typename TR>
 struct Either {
-	enum struct Side : u8 { Left, Right };
+	using Side = Either_Side;
 	union {
 		TL left_data;
 		TR right_data;
