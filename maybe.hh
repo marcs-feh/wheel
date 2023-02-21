@@ -8,7 +8,9 @@ namespace mf {
 
 template<typename T>
 struct Maybe {
-	T data;
+	union {
+		T data;
+	};
 	bool is_ok;
 
 	// Check if data is safe to get value (not nil)
@@ -38,48 +40,89 @@ struct Maybe {
 	// Default constructor
 	Maybe() { is_ok = false; }
 
-	// Copy constructor
-	Maybe(const Maybe& opt) : is_ok(opt.ok()){
-		if(is_ok){ data = opt.data; }
-	}
+	// Value constructor (copy)
 	Maybe(const T& val) : data(val) {
 		is_ok = true;
 	}
 
-	// Copy assignment
-	void operator=(const Maybe& opt){
-		is_ok = opt.ok();
-		if(is_ok){
-			data = opt.data;
-		}
-	}
-	void operator=(const T& val){
-		data  = val;
+	// Value constructor (move)
+	Maybe(T&& val) : data(as_rval(val)) {
 		is_ok = true;
 	}
 
-	// Move constructor
-	Maybe(Maybe&& opt) : is_ok(opt.ok()){
+	// Copy constructor
+	Maybe(const Maybe& opt) : is_ok(opt.is_ok){
 		if(is_ok){
-			data = as_rval(opt.data);
-			opt.is_ok = false;
+			new (&data) T(opt.data);
 		}
 	}
-	Maybe(T&& val) : data(as_rval(val)) {
+
+	// Move constructor
+	Maybe(Maybe&& opt) : is_ok(opt.is_ok){
+		if(is_ok){
+			new (&data) T(as_rval(opt.data));
+		}
+	}
+
+	// Copy assignment
+	void operator=(const Maybe& opt){
+		if(opt.is_ok){
+			if(is_ok){
+				data = opt.data;
+			} else {
+				new (&data) T(opt.data);
+			}
+			is_ok = true;
+		} else {
+			if(is_ok){
+				data.~T();
+			}
+			is_ok = false;
+		}
+	}
+
+	// Copy assignment value
+	void operator=(const T& val){
+		if(is_ok){
+			data  = val;
+		} else {
+			new (&data) T(val);
+		}
 		is_ok = true;
 	}
 
 	// Move assignment
 	void operator=(Maybe&& opt){
-		is_ok = opt.ok();
-		if(is_ok){
-			data = as_rval(opt.data);
+		if(opt.is_ok){
+			if(is_ok){
+				data = as_rval(opt.data);
+			} else {
+				new (&data) T(as_rval(opt.data));
+			}
+			is_ok = true;
+		} else {
+			if(is_ok){
+				data.~T();
+			}
+			is_ok = false;
 		}
-		opt.is_ok = false;
 	}
+
+	// Move assignment value
 	void operator=(T&& val){
-		data  = as_rval(val);
+		if(is_ok){
+			data  = as_rval(val);
+		} else {
+			new (&data) T(as_rval(val));
+		}
 		is_ok = true;
+	}
+
+	// Destructor
+	~Maybe(){
+		if(is_ok){
+			data.~T();
+		}
 	}
 };
 

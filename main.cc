@@ -3,6 +3,9 @@
 #include "print.cc"
 #define PANIC_INTERCEPT 1
 
+// TODO: reinforce maybe test
+// TODO: finish Etiher
+
 #include "utils.hh"
 #include "types.hh"
 #include "defer.hh"
@@ -43,6 +46,7 @@ void test_either(){
 
 struct A{
 	A(){ std::cout << "A ctor\n"; }
+	A(int){ std::cout << "A ctor\n"; }
 	A(const A&){std::cout << "A copy ctor\n";}
 	void operator=(const A&){std::cout << "A copy assign\n";}
 	A(A&&){std::cout << "A move ctor\n";}
@@ -60,20 +64,11 @@ struct B{
 };
 
 int main(){
-	// test_defer();
-	// test_maybe();
-	// test_array();
-	// test_dyn_array();
-	// test_either();
-	Either<A, B> e {B()};
-	auto a = A();
-	print("----");
-	e = a;
-	print("----");
-	e = A();
-	print("----");
-	e = B();
-
+	test_defer();
+	test_maybe();
+	test_array();
+	test_dyn_array();
+	test_either();
 	return 0;
 }
 
