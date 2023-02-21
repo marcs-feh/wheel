@@ -7,7 +7,7 @@
 #include "../array.hh"
 #include "../panic.hh"
 
-using namespace mf;
+using namespace wheel;
 
 void test_array(){
 	Test T("Array");
@@ -17,7 +17,7 @@ void test_array(){
 	EQ(4, a[0]);
 	EQ(2, a[1]);
 	a[34] = 3;
-	EQ(1u, mf::panic_intercepts);
+	EQ(1u, wheel::panic_intercepts);
 	Array<i32, 2> x, y;
 	x[0] = 6;
 	x[1] = 9;

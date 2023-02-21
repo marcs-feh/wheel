@@ -7,7 +7,7 @@
 #include "panic.hh"
 #include <sys/types.h>
 
-namespace mf {
+namespace wheel {
 
 template<typename T, usize N>
 struct Array {
@@ -19,7 +19,7 @@ struct Array {
 	// Bounds checked access
 	T& at(usize idx) & {
 		if(idx >= N){
-			mf::panic("Index out of bounds");
+			wheel::panic("Index out of bounds");
 			return data[0];
 		}
 		return data[idx];
@@ -30,7 +30,7 @@ struct Array {
 	// Bounds checked access (const)
 	const T& at(usize idx) const& {
 		if(idx >= N){
-			mf::panic("Index out of bounds");
+			wheel::panic("Index out of bounds");
 			return data[0];
 		}
 	}

@@ -4,7 +4,7 @@
 #include "panic.hh"
 #include "utils.hh"
 
-namespace mf {
+namespace wheel {
 
 template<typename T>
 struct Maybe {

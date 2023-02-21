@@ -6,7 +6,7 @@
 #include "../test.hh"
 #include "../either.hh"
 
-using namespace mf;
+using namespace wheel;
 
 void test_either(){
 	Test T("Either");
@@ -18,7 +18,7 @@ void test_either(){
 	EQ(true, b.side() == Either_Side::Right);
 	a.r_get();
 	b.l_get();
-	EQ(2u, mf::panic_intercepts);
+	EQ(2u, wheel::panic_intercepts);
 	EQ('L', a.l_get());
 	EQ(34u, b.r_get());
 	a = 69u;
@@ -27,7 +27,7 @@ void test_either(){
 	EQ('e', b.l_get());
 	a.l_get();
 	b.r_get();
-	EQ(4u, mf::panic_intercepts);
+	EQ(4u, wheel::panic_intercepts);
 	Either<char, u32> m(as_rval(a));
 	EQ(69u, m.r_get());
 }

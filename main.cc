@@ -10,7 +10,7 @@
 #include "tests/either.cc"
 #include "tests/maybe.cc"
 
-using namespace mf;
+using namespace wheel;
 
 int main(){
 	test_defer();

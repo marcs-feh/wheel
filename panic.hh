@@ -6,14 +6,14 @@
 #include "types.hh"
 
 #ifndef PANIC_INTERCEPT
-namespace mf {
+namespace wheel {
 static inline void panic(const char* msg = nullptr){
 	std::fprintf(stderr, "[PANIC]: %s\n", msg);
 	while(true){ std::exit(EXIT_FAILURE); }
 }
 }
 #else
-namespace mf {
+namespace wheel {
 static u32 panic_intercepts = 0;
 static inline void panic(const char* msg){
 	std::fprintf(stderr, "[(intercepted)PANIC]: %s\n", msg);
@@ -22,7 +22,7 @@ static inline void panic(const char* msg){
 }
 #endif
 
-namespace mf{
+namespace wheel{
 static inline void panic_assert(bool predicate, const char* msg = "Failed assert"){
 	if(!predicate){ panic(msg); }
 }

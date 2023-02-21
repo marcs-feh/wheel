@@ -3,7 +3,7 @@
 
 #include "../test.hh"
 #include "../dyn_array.hh"
-using namespace mf;
+using namespace wheel;
 
 template<typename T>
 void print(const Dyn_Array<T>& arr){

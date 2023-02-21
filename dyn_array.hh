@@ -5,7 +5,7 @@
 #include "types.hh"
 #include "utils.hh"
 
-namespace mf {
+namespace wheel {
 
 constexpr usize dyn_array_default_size = 16;
 constexpr usize dyn_array_min_size     = 4;
@@ -234,8 +234,8 @@ struct Dyn_Array {
 
 }
 
-static_assert(mf::dyn_array_default_size >= mf::dyn_array_min_size, "Default size must be bigger than min size");
-static_assert(mf::dyn_array_min_size > 3, "Min size must be larger than 3");
-static_assert(mf::dyn_array_growth_fact > 1.0, "Growth factor must be greater than 1.0");
+static_assert(wheel::dyn_array_default_size >= wheel::dyn_array_min_size, "Default size must be bigger than min size");
+static_assert(wheel::dyn_array_min_size > 3, "Min size must be larger than 3");
+static_assert(wheel::dyn_array_growth_fact > 1.0, "Growth factor must be greater than 1.0");
 
 #endif /* include guard */

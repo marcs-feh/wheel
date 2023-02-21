@@ -5,13 +5,12 @@
 #include "types.hh"
 #include "utils.hh"
 
-namespace mf {
-
-enum struct Either_Side : u8 { Left, Right };
+namespace wheel {
+namespace w = wheel;
 
 template<typename TL, typename TR>
 struct Either {
-	using Side = Either_Side;
+	enum struct Side : u8 { Left, Right };
 	union {
 		TL left_data;
 		TR right_data;
@@ -120,9 +119,9 @@ struct Either {
 	// Move constructor
 	Either(Either&& e) : side_tag(e.side_tag) {
 		if(side_tag == Side::Left){
-			new (&left_data) TL(mf::as_rval(e.left_data));
+			new (&left_data) TL(w::as_rval(e.left_data));
 		} else {
-			new (&right_data) TR(mf::as_rval(e.right_data));
+			new (&right_data) TR(w::as_rval(e.right_data));
 		}
 	}
 

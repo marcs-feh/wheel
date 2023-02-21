@@ -3,7 +3,7 @@
 
 #include "../test.hh"
 #include "../defer.hh"
-using namespace mf;
+using namespace wheel;
 
 void test_defer(){
 	Test T("Defer");

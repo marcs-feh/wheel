@@ -3,7 +3,7 @@
 #ifndef INCLUDE_UTILS_HH_
 #define INCLUDE_UTILS_HH_
 
-namespace mf {
+namespace wheel {
 template <typename T>
 struct Strip_Ref { typedef T Type; };
 

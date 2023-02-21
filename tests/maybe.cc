@@ -5,7 +5,7 @@
 
 #include "../test.hh"
 #include "../maybe.hh"
-using namespace mf;
+using namespace wheel;
 
 void test_maybe(){
 	Test T("Maybe");
